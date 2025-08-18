@@ -4,63 +4,70 @@ declare(strict_types=1);
 
 namespace RedisService\Core\KeyValue;
 
-use RedisException;
 use RedisService\Core\Connection\RedisConnectionInterface;
-use Redis;
 
 final readonly class RedisKeyValueStore implements KeyValueStoreInterface
 {
-	private Redis $redisClient;
-	private bool $isConnected;
+    private \Redis $redisClient;
+    private bool $isConnected;
 
-	public function __construct(RedisConnectionInterface $connection)
-	{
-		$this->redisClient = $connection->getClient();
-		$this->isConnected = $connection->isConnected();
-	}
+    public function __construct(RedisConnectionInterface $connection)
+    {
+        $this->redisClient = $connection->getClient();
+        $this->isConnected = $connection->isConnected();
+    }
 
-	public function get(string $key): string|bool
-	{
-		if ($this->isConnected === false) {
-			// log error;
-			return false;
-		}
+    public function get(string $key): string|bool
+    {
+        if (false === $this->isConnected) {
+            // log error;
+            return false;
+        }
 
-		try {
-			return $this->redisClient->get($key);
-		} catch (RedisException $e) {
-			// log error;
-			return false;
-		}
-	}
+        try {
+            $data = $this->redisClient->get($key);
+            if (false === is_string($data)) {
+                // log error;
+                return false;
+            }
 
-	public function set(string $key, mixed $value, ?int $ttl = null): void
-	{
-		if ($this->isConnected === false) {
-			// log error;
-			return;
-		}
+            return $data;
+        } catch (\RedisException $e) {
+            // log error;
+            return false;
+        }
+    }
 
-		try {
-			$this->redisClient->set($key, json_encode($value), $ttl);
-		} catch (RedisException $e) {
-			// log error;
-			return;
-		}
-	}
+    /**
+     * @param array<string, int> $ttl
+     */
+    public function set(string $key, mixed $value, array $ttl = []): void
+    {
+        if (false === $this->isConnected) {
+            // log error;
+            return;
+        }
 
-	public function del(string ...$keys): int|bool
-	{
-		if ($this->isConnected === false) {
-			// log error;
-			return false;
-		}
+        try {
+            $this->redisClient->set($key, json_encode($value), $ttl);
+        } catch (\RedisException $e) {
+            // log error;
+            return;
+        }
+    }
 
-		try {
-			return $this->redisClient->del($keys);
-		} catch (RedisException $e) {
-			// log error;
-			return false;
-		}
-	}
+    public function del(string ...$keys): int|bool
+    {
+        if (false === $this->isConnected) {
+            // log error;
+            return false;
+        }
+
+        try {
+            return $this->redisClient->del($keys);
+        } catch (\RedisException $e) {
+            // log error;
+            return false;
+        }
+    }
 }

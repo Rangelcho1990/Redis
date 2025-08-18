@@ -15,26 +15,26 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class RedisServiceExtension extends Extension
 {
-	public function load(array $configs, ContainerBuilder $container): void
-	{
-		$config = $this->processConfiguration(new Configuration(), $configs);
-		$dsn    = $config['dsn']    ?? 'redis://127.0.0.1:6379';
+    public function load(array $configs, ContainerBuilder $container): void
+    {
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $dsn = $config['dsn'] ?? 'redis://127.0.0.1:6379';
 
-		$connClass = ExtRedisConnection::class;
+        $connClass = ExtRedisConnection::class;
 
-		// Connection service
-		$connDef = (new Definition($connClass)) ->setArguments([$dsn]);
-		$container->setDefinition($connClass, $connDef);
+        // Connection service
+        $connDef = (new Definition($connClass))->setArguments([$dsn]);
+        $container->setDefinition($connClass, $connDef);
 
-		// Alias the interface to the chosen implementation
-		$container->setAlias(RedisConnectionInterface::class, $connClass)->setPublic(true);
+        // Alias the interface to the chosen implementation
+        $container->setAlias(RedisConnectionInterface::class, $connClass)->setPublic(true);
 
-		// KeyValue store service
-		$storeDef = (new Definition(RedisKeyValueStore::class))
-			->setArguments([new Reference(RedisConnectionInterface::class)]);
-		$container->setDefinition(RedisKeyValueStore::class, $storeDef);
+        // KeyValue store service
+        $storeDef = (new Definition(RedisKeyValueStore::class))
+            ->setArguments([new Reference(RedisConnectionInterface::class)]);
+        $container->setDefinition(RedisKeyValueStore::class, $storeDef);
 
-		// Alias the store interface to the concrete implementation
-		$container->setAlias(KeyValueStoreInterface::class, RedisKeyValueStore::class)->setPublic(true);
-	}
+        // Alias the store interface to the concrete implementation
+        $container->setAlias(KeyValueStoreInterface::class, RedisKeyValueStore::class)->setPublic(true);
+    }
 }
