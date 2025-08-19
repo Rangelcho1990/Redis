@@ -11,7 +11,9 @@
         "symfony/console": "^7.3",
         "symfony/string": "^7.3",
         "symfony/service-contracts": "^3.6",
-        "illuminate/support": "^10.0"
+        "illuminate/support": "^10.0",
+        "phpunit/phpunit": "^12.3",
+        "symfony/framework-bundle": "^7.2"
     },
     "license": "MIT",
     "autoload": {
@@ -48,6 +50,7 @@
       "code-fix": [
         "@cs-fix",
         "@phpstan"
-      ]
+      ],
+      "phpunit": "vendor/bin/phpunit"
     }
 }
