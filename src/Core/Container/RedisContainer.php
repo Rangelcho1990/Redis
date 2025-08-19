@@ -70,4 +70,9 @@ final readonly class RedisContainer implements RedisContainerInterface
             return false;
         }
     }
+
+    public function isConnected(): bool
+    {
+        return $this->isConnected;
+    }
 }
