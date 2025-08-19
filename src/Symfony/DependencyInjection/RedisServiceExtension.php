@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace RedisService\Symfony\DependencyInjection;
 
+use RedisService\Core\Connection\RedisConnection;
 use RedisService\Core\Connection\RedisConnectionInterface;
-use RedisService\Core\ExtRedisConnection;
-use RedisService\Core\KeyValue\KeyValueStoreInterface;
-use RedisService\Core\KeyValue\RedisKeyValueStore;
+use RedisService\Core\Container\RedisContainer;
+use RedisService\Core\Container\RedisContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -17,10 +17,10 @@ final class RedisServiceExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration(new Configuration(), $configs);
+        $config = $this->processConfiguration(new RedisConfiguration(), $configs);
         $dsn = $config['dsn'] ?? 'redis://127.0.0.1:6379';
 
-        $connClass = ExtRedisConnection::class;
+        $connClass = RedisConnection::class;
 
         // Connection service
         $connDef = (new Definition($connClass))->setArguments([$dsn]);
@@ -30,11 +30,11 @@ final class RedisServiceExtension extends Extension
         $container->setAlias(RedisConnectionInterface::class, $connClass)->setPublic(true);
 
         // KeyValue store service
-        $storeDef = (new Definition(RedisKeyValueStore::class))
+        $storeDef = (new Definition(RedisContainer::class))
             ->setArguments([new Reference(RedisConnectionInterface::class)]);
-        $container->setDefinition(RedisKeyValueStore::class, $storeDef);
+        $container->setDefinition(RedisContainer::class, $storeDef);
 
         // Alias the store interface to the concrete implementation
-        $container->setAlias(KeyValueStoreInterface::class, RedisKeyValueStore::class)->setPublic(true);
+        $container->setAlias(RedisContainerInterface::class, RedisContainer::class)->setPublic(true);
     }
 }

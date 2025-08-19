@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RedisService\Core\KeyValue;
+namespace RedisService\Core\Container;
 
-interface KeyValueStoreInterface
+interface RedisContainerInterface
 {
     public function get(string $key): string|bool;
 

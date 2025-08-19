@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace RedisService\Core\KeyValue;
+namespace RedisService\Core\Container;
 
 use RedisService\Core\Connection\RedisConnectionInterface;
 
-final readonly class RedisKeyValueStore implements KeyValueStoreInterface
+final readonly class RedisContainer implements RedisContainerInterface
 {
     private \Redis $redisClient;
     private bool $isConnected;
