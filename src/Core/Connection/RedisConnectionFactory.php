@@ -10,7 +10,7 @@ final class RedisConnectionFactory
     {
         return match ($driver) {
             'ext-redis' => new RedisConnection($dsn),
-            default => throw new \InvalidArgumentException("Unsupported driver: {$driver}"),
+            default => throw new \InvalidArgumentException('Unsupported driver: "'.$driver.'" '),
         };
     }
 }
