@@ -44,13 +44,43 @@ final class RedisContainerTest extends TestCase
         $this->assertTrue($redisContainer->isConnected(), 'Redis connection success!');
     }
 
-    public function testCheckRedisConnectionFail(): void
+    public function testSetValueToClientSuccess(): void
     {
-        $redisConnection = new RedisConnection('redis://127.0.0.1:63');
-        $redisContainer = new RedisContainer($redisConnection);
+        $redisContainer = new RedisContainer($this->redisConnection);
+        $key = $value = 'testSetValue';
 
-//		$this->assertFalse($redisContainer->isConnected(), 'RedisException: Connection refused');
-//      $this->expectException(\RedisException::class)
-//		$this->expectExceptionMessage('RedisException: Redis DSN is empty');
+        $redisContainer->set($key, $value);
+        $redisValue = $redisContainer->get($key);
+        if (is_string($redisValue)) {
+            $redisValue = json_decode($redisValue, true);
+        }
+
+        $this->assertSame($value, $redisValue);
+    }
+
+    public function testDeleteValueFromClientSuccess(): void
+    {
+        $redisContainer = new RedisContainer($this->redisConnection);
+        $key = $value = 'testSetValue';
+
+        $redisContainer->set($key, $value);
+        $redisContainer->del([$key]);
+
+        $this->assertFalse($redisContainer->get($key));
+    }
+
+    public function testDeleteValuesFromClientSuccess(): void
+    {
+        $redisContainer = new RedisContainer($this->redisConnection);
+        $key = $value = 'testSetValue';
+        $key2 = $value2 = 'redis_container';
+
+        $redisContainer->set($key, $value);
+        $redisContainer->set($key2, $value2);
+
+        $redisContainer->del([$key, $key2]);
+
+        $this->assertFalse($redisContainer->get($key));
+        $this->assertFalse($redisContainer->get($key2));
     }
 }

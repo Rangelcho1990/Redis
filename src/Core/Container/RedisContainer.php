@@ -6,7 +6,7 @@ namespace RedisService\Core\Container;
 
 use RedisService\Core\Connection\RedisConnectionInterface;
 
-final readonly class RedisContainer implements RedisContainerInterface
+final class RedisContainer implements RedisContainerInterface
 {
     private \Redis $redisClient;
     private bool $isConnected;
@@ -56,7 +56,10 @@ final readonly class RedisContainer implements RedisContainerInterface
         }
     }
 
-    public function del(string ...$keys): int|bool
+    /**
+     * @param array<string> $keys
+     */
+    public function del(array $keys): int|bool
     {
         if (false === $this->isConnected) {
             // log error;

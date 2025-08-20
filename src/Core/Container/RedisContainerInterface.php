@@ -13,5 +13,8 @@ interface RedisContainerInterface
      */
     public function set(string $key, mixed $value, array $ttl = []): void;
 
-    public function del(string ...$keys): int|bool;
+    /**
+     * @param array<string> $keys
+     */
+    public function del(array $keys): int|bool;
 }
