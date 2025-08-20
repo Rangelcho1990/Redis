@@ -45,7 +45,7 @@ final class RedisServiceExtensionTest extends TestCase
         $this->assertInstanceOf(RedisContainer::class, $redisContainer);
     }
 
-    public function testRedisServiceExtensionFail(): void
+    public function testRedisConnectionInstance(): void
     {
         $container = $this->buildContainer();
 
