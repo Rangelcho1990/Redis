@@ -11,15 +11,27 @@
         "symfony/console": "^7.3",
         "symfony/string": "^7.3",
         "symfony/service-contracts": "^3.6",
-        "illuminate/support": "^10.0",
+        "illuminate/support": "^11.0",
         "phpunit/phpunit": "^12.3",
-        "symfony/framework-bundle": "^7.2"
+        "symfony/framework-bundle": "^7.2",
+        "illuminate/contracts": "^11.0"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-          "RedisService\\": "src/"
+          "RedisService\\": "src/",
+          "ExampleLib\\": "src/Laravel/"
         }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "ExampleLib\\RedisServiceProvider"
+        ],
+        "aliases": {
+          "RedisCore": "ExampleLib\\Facades\\RedisCore"
+        }
+      }
     },
     "autoload-dev": {
       "psr-4": {
@@ -36,7 +48,8 @@
         "friendsofphp/php-cs-fixer": "^3.86",
         "phpstan/phpstan": "^2.1",
         "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-phpunit": "^2.0"
+        "phpstan/phpstan-phpunit": "^2.0",
+        "illuminate/redis": "^10.0|^11.0"
     },
     "config": {
         "allow-plugins": {
