@@ -1,7 +1,8 @@
 {
-    "name": "your-vendor/redis-service",
+    "name": "redis/redis-service",
     "description": "Framework-agnostic Redis service with Symfony & Laravel integrations",
     "type": "library",
+    "license": "MIT",
     "require": {
         "php": "^8.1",
         "ext-redis": "*",
@@ -16,7 +17,6 @@
         "symfony/framework-bundle": "^7.2",
         "illuminate/contracts": "^11.0"
     },
-    "license": "MIT",
     "autoload": {
         "psr-4": {
           "RedisService\\": "src/",
